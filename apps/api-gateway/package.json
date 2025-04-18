@@ -1,0 +1,28 @@
+{
+  "name": "@sellora/api-gateway",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "targets": {
+      "serve": {
+        "executor": "@nx/js:node",
+        "defaultConfiguration": "development",
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "buildTarget": "@sellora/api-gateway:build",
+          "runBuildTargetDependencies": false
+        },
+        "configurations": {
+          "development": {
+            "buildTarget": "@sellora/api-gateway:build:development"
+          },
+          "production": {
+            "buildTarget": "@sellora/api-gateway:build:production"
+          }
+        }
+      }
+    }
+  }
+}
