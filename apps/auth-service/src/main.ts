@@ -1,7 +1,7 @@
-import { errorMiddleware } from "@sellora/error-handler/error-middleware";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
+import { errorMiddleware } from "../../../packages/error-handler/error-middleware";
 
 const host = process.env.HOST ?? "localhost";
 const port = process.env.PORT ? Number(process.env.PORT) : 6001;

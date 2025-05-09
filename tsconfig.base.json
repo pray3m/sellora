@@ -21,11 +21,5 @@
     "customConditions": [
       "development"
     ],
-    "baseUrl": ".",
-    "paths": {
-      "@sellora/*": [
-        "packages/*"
-      ]
-    }
   }
 }
