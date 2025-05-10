@@ -43,4 +43,7 @@ Thumbs.db
 
 test-output
 
+#generated files
+generated
+
 .env
