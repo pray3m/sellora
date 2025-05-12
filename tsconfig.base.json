@@ -5,6 +5,7 @@
     "emitDeclarationOnly": true,
     "importHelpers": true,
     "isolatedModules": true,
+    "baseUrl": ".",
     "lib": [
       "es2022"
     ],
@@ -21,5 +22,10 @@
     "customConditions": [
       "development"
     ],
+    "paths": {
+      "@packages/*": [
+        "packages/*"
+      ]
+    }
   }
 }
