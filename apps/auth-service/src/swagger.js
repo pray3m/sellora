@@ -6,7 +6,7 @@ const doc = {
     description: "Automatically generated swagger docs",
     version: "1.0.0",
   },
-  host: "locahost:6001",
+  host: "localhost:6001",
   schemes: ["http"],
 };
 
