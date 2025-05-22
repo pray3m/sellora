@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
   res.send({ message: "Hello API" });
 });
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get("/docs-json", (req, res) => {
   res.json(swaggerDocument);
 });
