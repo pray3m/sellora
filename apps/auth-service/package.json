@@ -41,5 +41,8 @@
         "command": "docker build -f apps/auth-service/Dockerfile . -t auth-service"
       }
     }
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10"
   }
 }
