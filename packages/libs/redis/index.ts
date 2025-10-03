@@ -7,6 +7,6 @@ import Redis from "ioredis";
 // });
 
 // using upstash
-const redis = new Redis(process.env.REDIS_DATABASE_URI!);
+const redis = new Redis(process.env.REDIS_URL!);
 
 export default redis;
