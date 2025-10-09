@@ -1,8 +1,10 @@
 import crypto from "crypto";
-import { NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ValidationError } from "@packages/error-handler";
 import redis from "@packages/libs/redis";
 import { sendEmail } from "./sendMail";
+import { Respondable } from "ioredis/built/types";
+import prisma from "@packages/libs/prisma";
 
 const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/;
 
@@ -78,10 +80,7 @@ export const sendOtp = async (
   await redis.set(`otp_cooldown:${email}`, "true", "EX", 60);
 };
 
-export const verifyOtp = async (
-  email: string,
-  otp: string,
-) => {
+export const verifyOtp = async (email: string, otp: string) => {
   const storedOtp = await redis.get(`otp:${email}`);
   if (!storedOtp) {
     throw new ValidationError("Invalid or expired otp");
@@ -105,4 +104,36 @@ export const verifyOtp = async (
   }
 
   await redis.del(`otp:${email}`, failedAttemptsKey);
+};
+
+export const handleForgotPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  userType: "user" | "seller"
+) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) throw new ValidationError("Email is required.");
+
+    // find user/seller in DB
+    const user =
+      userType === "user" &&
+      (await prisma.user.findUnique({ where: { email } }));
+
+    if (!user) throw new ValidationError(`${userType} not found!`);
+
+    await checkOtpRestrictions(email, next);
+    await trackOtpRequests(email, next);
+
+    //generate OTP and send mail
+    await sendOtp(email, user.name, "forgot-password-user-mail");
+
+    res
+      .status(200)
+      .json({ message: "OTP sent to email.Please verify your account." });
+  } catch (error) {
+    next(error);
+  }
 };
