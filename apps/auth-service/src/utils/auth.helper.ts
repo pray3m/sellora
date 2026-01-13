@@ -3,7 +3,6 @@ import { NextFunction, Request, Response } from "express";
 import { ValidationError } from "@packages/error-handler";
 import redis from "@packages/libs/redis";
 import { sendEmail } from "./sendMail";
-import { Respondable } from "ioredis/built/types";
 import prisma from "@packages/libs/prisma";
 
 const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/;
@@ -133,6 +132,27 @@ export const handleForgotPassword = async (
     res
       .status(200)
       .json({ message: "OTP sent to email.Please verify your account." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// verify forgot password otp
+export const verifyForgotPasswordOtp = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return next(new ValidationError("Email and OTP are required."));
+    }
+
+    await verifyOtp(email, otp);
+
+    res.status(200).json({ message: "OTP verified successfully." });
   } catch (error) {
     next(error);
   }
